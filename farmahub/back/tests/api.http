@@ -1,0 +1,30 @@
+### Variáveis
+@baseUrl = http://localhost:3000
+@famaceuticoToken = token_farma
+@compradorToken = token_compr
+
+### ==============================================
+### AUTENTICAÇÃO
+### ==============================================
+
+### Registrar Farmacêutico
+POST {{baseUrl}}/auth/registro
+Content-Type: application/json
+
+{
+    "nome": "José Carlos",
+    "email": "jose@email.com",
+    "senha": "jose123",
+    "role": "farmaceutico"
+}
+
+### Registrar Comprador 1
+POST {{baseUrl}}/auth/registro
+Content-Type: application/json
+
+{
+    "nome": "Maria Silva",
+    "email": "maria@email.com",
+    "senha": "maria123",
+    "role": "comprador"
+}
