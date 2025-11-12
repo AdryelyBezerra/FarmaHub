@@ -5,7 +5,7 @@ import { initializeDatabase } from "./config/database";
 
 // Importar rotas
 import authRoutes from "./routes/auth";
-//import produtoRoutes from "./routes/produtos";
+import produtoRoutes from "./routes/produtos";
 //import favoritoRoutes from "./routes/favoritos";
 
 const app = express();
@@ -17,7 +17,7 @@ app.use(passport.initialize());
 
 // Rotas
 app.use("/auth", authRoutes);
-//app.use("/produtos", produtoRoutes);
+app.use("/produtos", produtoRoutes);
 //app.use("/favoritos", favoritoRoutes);
 
 // Rota raiz

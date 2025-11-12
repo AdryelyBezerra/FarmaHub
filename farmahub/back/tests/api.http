@@ -1,7 +1,10 @@
+### SEMPRE deixe espaço de uma linha entre Content-Type... e o resto da requisição
+
+
 ### Variáveis
 @baseUrl = http://localhost:3000
-@famaceuticoToken = token_farma
-@compradorToken = token_compr
+@farmaceuticoToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJqb3NlQGVtYWlsLmNvbSIsInJvbGUiOiJmYXJtYWNldXRpY28iLCJpYXQiOjE3NjI5MTQ5OTksImV4cCI6MTc2MzAwMTM5OX0.ov_8bPjvw1PEDpWtHojg6Tu9f0LaWeWw4QyW16BYxco
+@compradorToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJtYXJpYUBlbWFpbC5jb20iLCJyb2xlIjoiY29tcHJhZG9yIiwiaWF0IjoxNzYyOTE5ODUxLCJleHAiOjE3NjMwMDYyNTF9.YA2PIdWlvZH7S-12AZaLIgwWX1kyDvNQqBdiyfhEreg
 
 ### ==============================================
 ### AUTENTICAÇÃO
@@ -27,4 +30,67 @@ Content-Type: application/json
     "email": "maria@email.com",
     "senha": "maria123",
     "role": "comprador"
+}
+
+## Login Farmacêutico 1
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "jose@email.com",
+  "senha": "jose123"
+} 
+
+// ou no terminal gitbash: curl -X POST http://localhost:3000/auth/login -H "Content-Type: application/json" -d "{\"email\":\"jose@email.com\",\"senha\":\"jose123\"}"
+
+## Login Comprador 1
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "maria@email.com",
+  "senha": "maria123"
+} 
+
+// ou no terminal gitbash: curl -X POST http://localhost:3000/auth/login -H "Content-Type: application/json" -d "{\"email\":\"maria@email.com\",\"senha\":\"maria123\"}"
+
+
+### ==============================================
+### PRODUTOS
+### ==============================================
+
+### Criar Produto (Usuário 1 - José) apenas farmaceutico
+POST {{baseUrl}}/produtos
+Authorization: Bearer {{farmaceuticoToken}}
+Content-Type: application/json
+
+{
+  "nome": "Dipirona",
+  "apresentacao": "500 g/ml Líquido",
+  "fabricante": "EMS",
+  "tipo": "medicamento",
+  "preco": 8.7,
+  "quantidade": 23
+}
+
+### Listar todos os produtos (requer autenticação)
+GET {{baseUrl}}/produtos
+Authorization: Bearer {{farmaceuticoToken}}
+
+### Pesquisar produto específico
+GET {{baseUrl}}/produtos/1
+Authorization: Bearer {{farmaceuticoToken}}
+
+### Atualizar um produto (apenas farmaceutico)
+PUT {{baseUrl}}/produtos/1
+Authorization: Bearer {{farmaceuticoToken}}
+Content-Type: application/json
+
+{
+  "nome": "Dipirona",
+  "apresentacao": "500 g/ml Líquido",
+  "fabricante": "EMS",
+  "tipo": "medicamento",
+  "preco": 5.20,
+  "quantidade": 23
 }

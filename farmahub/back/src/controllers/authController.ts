@@ -27,8 +27,8 @@ export const registro = async (req: Request, res: Response) => {
     const hashedPassword = await bcrypt.hash(dadosValidados.senha, 10);
 
     const role: UserRole = dadosValidados.role
-    ? (dadosValidados.role as UserRole) // validar input antes de criar
-    : UserRole.COMPRADOR;
+      ? (dadosValidados.role as UserRole) // validar input antes de criar
+      : UserRole.COMPRADOR;
 
     // Criar usuário
     const novoUsuario = userRepository.create({
@@ -84,19 +84,6 @@ export const login = async (req: Request, res: Response) => {
         id: usuario.id,
         email: usuario.email,
         role: usuario.role,
-        token: "", // Será preenchido após a criação
-      },
-      SECRET_KEY,
-      { expiresIn: "24h" }
-    );
-
-    // Adicionar o próprio token ao payload (para blacklist)
-    const tokenComPayload = jwt.sign(
-      {
-        id: usuario.id,
-        email: usuario.email,
-        role: usuario.role,
-        token: token,
       },
       SECRET_KEY,
       { expiresIn: "24h" }
@@ -104,7 +91,7 @@ export const login = async (req: Request, res: Response) => {
 
     res.json({
       mensagem: "Login realizado com sucesso",
-      token: tokenComPayload,
+      token,
       usuario: {
         id: usuario.id,
         nome: usuario.nome,
@@ -134,8 +121,8 @@ export const logout = async (req: Request, res: Response) => {
     // Adicionar token à blacklist
     const blacklistRepository = AppDataSource.getRepository(TokenBlacklist);
     const blacklistedToken = blacklistRepository.create({
-      token: token,
-      expiracao: expiracao,
+      token,
+      expiracao,
     });
     await blacklistRepository.save(blacklistedToken);
 
