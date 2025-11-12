@@ -94,3 +94,42 @@ Content-Type: application/json
   "preco": 5.20,
   "quantidade": 23
 }
+
+
+### ==============================================
+### FAVORITOS
+### ==============================================
+
+### Favoritar produto
+POST {{baseUrl}}/favoritos
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+"produto_id": 1
+}
+
+
+### Tentar favoritar produto já favoritado
+POST {{baseUrl}}/favoritos
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+"produto_id": 1
+}
+
+
+### Listar meus favoritos
+GET {{baseUrl}}/favoritos
+Authorization: Bearer {{compradorToken}}
+
+
+### Desfavoritar produto
+DELETE {{baseUrl}}/favoritos/1
+Authorization: Bearer {{compradorToken}}
+
+
+### Verificar se foi removido
+GET {{baseUrl}}/favoritos
+Authorization: Bearer {{compradorToken}}
