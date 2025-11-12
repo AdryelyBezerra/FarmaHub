@@ -50,9 +50,16 @@ export const registro = async (req: Request, res: Response) => {
       },
     });
   } catch (error: any) {
+    console.log("ERRO NO REGISTRO:", error); // <--- ADICIONE ISSO
+
     if (error.name === "ZodError") {
-      return res.status(400).json({ erro: error.errors });
+      // Vamos garantir que o erro seja enviado como objeto visível
+      return res.status(400).json({ 
+          mensagem: "Erro de validação",
+          detalhes: error.errors 
+      });
     }
+    
     res.status(500).json({ erro: "Erro ao registrar usuário" });
   }
 };

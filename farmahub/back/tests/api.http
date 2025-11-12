@@ -1,174 +1,222 @@
-### SEMPRE deixe espaço de uma linha entre Content-Type... e o resto da requisição
-
-
-### Variáveis
+### ==============================================
+### CONFIGURAÇÕES GERAIS
+### ==============================================
 @baseUrl = http://localhost:3000
-@farmaceuticoToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJqb3NlQGVtYWlsLmNvbSIsInJvbGUiOiJmYXJtYWNldXRpY28iLCJpYXQiOjE3NjI5MTQ5OTksImV4cCI6MTc2MzAwMTM5OX0.ov_8bPjvw1PEDpWtHojg6Tu9f0LaWeWw4QyW16BYxco
-@compradorToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJtYXJpYUBlbWFpbC5jb20iLCJyb2xlIjoiY29tcHJhZG9yIiwiaWF0IjoxNzYyOTE5ODUxLCJleHAiOjE3NjMwMDYyNTF9.YA2PIdWlvZH7S-12AZaLIgwWX1kyDvNQqBdiyfhEreg
+
+@farmaceuticoToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJqb2FvQGZhcm1hLmNvbSIsInJvbGUiOiJmYXJtYWNldXRpY28iLCJpYXQiOjE3NjI5NjkxOTAsImV4cCI6MTc2MzA1NTU5MH0.b6WQviGRdkQQJB5bwGkP2oclhxe_Kq3roMJGHGk7Dao
+@compradorToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJhbmFAZ21haWwuY29tIiwicm9sZSI6ImNvbXByYWRvciIsImlhdCI6MTc2Mjk2OTIxNiwiZXhwIjoxNzYzMDU1NjE2fQ.sL0S8o-SPnvA3KPNhOE8RCH2zR0iaPW6o3RejuNouQ0
+
 
 ### ==============================================
-### AUTENTICAÇÃO
+### 1. AUTENTICAÇÃO (AUTH)
 ### ==============================================
 
-### Registrar Farmacêutico
+### 1.1 Registrar Farmacêutico
 POST {{baseUrl}}/auth/registro
 Content-Type: application/json
 
 {
-    "nome": "José Carlos",
-    "email": "jose@email.com",
-    "senha": "jose123",
-    "role": "farmaceutico"
+  "nome": "João Farmacêutico",
+  "email": "joao@farma.com",
+  "senha": "123456",
+  "role": "farmaceutico"
 }
 
-### Registrar Comprador 1
+### 1.2 Registrar Comprador
 POST {{baseUrl}}/auth/registro
 Content-Type: application/json
 
 {
-    "nome": "Maria Silva",
-    "email": "maria@email.com",
-    "senha": "maria123",
-    "role": "comprador"
+  "nome": "Ana Compradora",
+  "email": "ana@gmail.com",
+  "senha": "123456",
+  "role": "comprador"
 }
 
-## Login Farmacêutico 1
+### 1.3 [ERRO] Registrar com email inválido
+POST {{baseUrl}}/auth/registro
+Content-Type: application/json
+
+{
+  "nome": "Teste",
+  "email": "emailerrado",
+  "senha": "123456"
+}
+
+### 1.4 Login Farmacêutico
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "jose@email.com",
-  "senha": "jose123"
-} 
+  "email": "joao@farma.com",
+  "senha": "123456"
+}
 
-// ou no terminal gitbash: curl -X POST http://localhost:3000/auth/login -H "Content-Type: application/json" -d "{\"email\":\"jose@email.com\",\"senha\":\"jose123\"}"
-
-## Login Comprador 1
+### 1.5 Login Comprador
 POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-  "email": "maria@email.com",
-  "senha": "maria123"
-} 
+  "email": "ana@gmail.com",
+  "senha": "123456"
+}
 
-// ou no terminal gitbash: curl -X POST http://localhost:3000/auth/login -H "Content-Type: application/json" -d "{\"email\":\"maria@email.com\",\"senha\":\"maria123\"}"
+### 1.6 Logout (Invalida o token atual)
+POST {{baseUrl}}/auth/logout
+Authorization: Bearer {{compradorToken}}
 
 
 ### ==============================================
-### PRODUTOS
+### 2. PRODUTOS (CRUD)
 ### ==============================================
 
-### Criar Produto (Usuário 1 - José) apenas farmaceutico
+### 2.1 Criar Produto 1 (Farmacêutico)
 POST {{baseUrl}}/produtos
 Authorization: Bearer {{farmaceuticoToken}}
 Content-Type: application/json
 
 {
-  "nome": "Dipirona",
-  "apresentacao": "500 g/ml Líquido",
-  "fabricante": "EMS",
+  "nome": "Paracetamol 750mg",
+  "apresentacao": "Caixa com 20 comprimidos",
+  "fabricante": "Medley",
   "tipo": "medicamento",
-  "preco": 8.7,
-  "quantidade": 23
+  "preco": 12.50,
+  "quantidade": 100
 }
 
-### Listar todos os produtos (requer autenticação)
+### 2.2 Criar Produto 2 (Farmacêutico - Para testes de carrinho)
+POST {{baseUrl}}/produtos
+Authorization: Bearer {{farmaceuticoToken}}
+Content-Type: application/json
+
+{
+  "nome": "Protetor Solar FPS 50",
+  "apresentacao": "200ml",
+  "fabricante": "Nivea",
+  "tipo": "cosmetico",
+  "preco": 45.90,
+  "quantidade": 50
+}
+
+### 2.3 [ERRO] Comprador tentando criar produto (403 Forbidden)
+POST {{baseUrl}}/produtos
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "nome": "Produto Hacker",
+  "preco": 1.00
+}
+
+### 2.4 [ERRO] Validação de Schema (Preço negativo)
+POST {{baseUrl}}/produtos
+Authorization: Bearer {{farmaceuticoToken}}
+Content-Type: application/json
+
+{
+  "nome": "Erro Schema",
+  "tipo": "medicamento",
+  "preco": -10.00,
+  "quantidade": 10
+}
+
+### 2.5 Listar Produtos
+# O Comprador verá lista vazia pois o controller filtra por user_id do logado.
 GET {{baseUrl}}/produtos
 Authorization: Bearer {{farmaceuticoToken}}
 
-### Pesquisar produto específico
+### 2.6 Buscar Produto Específico por ID (Público/Autenticado)
 GET {{baseUrl}}/produtos/1
-Authorization: Bearer {{farmaceuticoToken}}
+Authorization: Bearer {{compradorToken}}
 
-### Atualizar um produto (apenas farmaceutico)
+### 2.7 Atualizar Produto (Apenas Dono/Farmacêutico)
 PUT {{baseUrl}}/produtos/1
 Authorization: Bearer {{farmaceuticoToken}}
 Content-Type: application/json
 
 {
-  "nome": "Dipirona",
-  "apresentacao": "500 g/ml Líquido",
-  "fabricante": "EMS",
-  "tipo": "medicamento",
-  "preco": 5.20,
-  "quantidade": 23
+  "nome": "Paracetamol 750mg (Oferta)",
+  "preco": 9.99
 }
 
+### 2.8 Deletar Produto (Apenas Dono/Farmacêutico)
+# Vai apagar o ID 1. Use o ID 2 para os testes de carrinho abaixo.
+DELETE {{baseUrl}}/produtos/1
+Authorization: Bearer {{farmaceuticoToken}}
+
 
 ### ==============================================
-### FAVORITOS
+### 3. FAVORITOS
 ### ==============================================
 
-### Favoritar produto
+### 3.1 Adicionar aos Favoritos (Usando produto ID 2)
 POST {{baseUrl}}/favoritos
 Authorization: Bearer {{compradorToken}}
 Content-Type: application/json
 
 {
-"produto_id": 1
+  "produto_id": 2
 }
 
-
-### Tentar favoritar produto já favoritado
+### 3.2 [ERRO] Tentar favoritar de novo o mesmo produto
 POST {{baseUrl}}/favoritos
 Authorization: Bearer {{compradorToken}}
 Content-Type: application/json
 
 {
-"produto_id": 1
+  "produto_id": 2
 }
 
-
-### Listar meus favoritos
+### 3.3 Listar Favoritos
 GET {{baseUrl}}/favoritos
 Authorization: Bearer {{compradorToken}}
 
-
-### Desfavoritar produto
-DELETE {{baseUrl}}/favoritos/1
-Authorization: Bearer {{compradorToken}}
-
-
-### Verificar se foi removido
-GET {{baseUrl}}/favoritos
+### 3.4 Remover Favorito
+# Passar o ID DO PRODUTO na URL, não o ID do favorito
+DELETE {{baseUrl}}/favoritos/2
 Authorization: Bearer {{compradorToken}}
 
 
 ### ==============================================
-### CARRINHO
+### 4. CARRINHO
 ### ==============================================
 
-### Inserir produto no carrinho
+### 4.1 Adicionar ao Carrinho (Usando produto ID 2)
 POST {{baseUrl}}/carrinho
 Authorization: Bearer {{compradorToken}}
 Content-Type: application/json
 
 {
-"produto_id": 1
+  "produto_id": 2
 }
 
-
-### Tentar colocar produto repetido no carrinho
-POST {{baseUrl}}/carrinho
-Authorization: Bearer {{compradorToken}}
-Content-Type: application/json
-
-{
-"produto_id": 1
-}
-
-
-### Listar produtos do carrinho
+### 4.2 Listar Carrinho
 GET {{baseUrl}}/carrinho
 Authorization: Bearer {{compradorToken}}
 
+### 4.3 [ERRO] Adicionar produto duplicado
+POST {{baseUrl}}/carrinho
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
 
-### Remover produto do carrinho
-DELETE {{baseUrl}}/carrinho/1
+{
+  "produto_id": 2
+}
+
+### 4.4 [ERRO] Produto Inexistente
+POST {{baseUrl}}/carrinho
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "produto_id": 9999
+}
+
+### 4.5 Remover do Carrinho
+# Atenção: Passar o ID DO PRODUTO na URL
+DELETE {{baseUrl}}/carrinho/2
 Authorization: Bearer {{compradorToken}}
 
-
-### Verificar se foi removido
+### 4.6 Verificar Carrinho Vazio
 GET {{baseUrl}}/carrinho
 Authorization: Bearer {{compradorToken}}
