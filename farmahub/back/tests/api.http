@@ -133,3 +133,42 @@ Authorization: Bearer {{compradorToken}}
 ### Verificar se foi removido
 GET {{baseUrl}}/favoritos
 Authorization: Bearer {{compradorToken}}
+
+
+### ==============================================
+### CARRINHO
+### ==============================================
+
+### Inserir produto no carrinho
+POST {{baseUrl}}/carrinho
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+"produto_id": 1
+}
+
+
+### Tentar colocar produto repetido no carrinho
+POST {{baseUrl}}/carrinho
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+"produto_id": 1
+}
+
+
+### Listar produtos do carrinho
+GET {{baseUrl}}/carrinho
+Authorization: Bearer {{compradorToken}}
+
+
+### Remover produto do carrinho
+DELETE {{baseUrl}}/carrinho/1
+Authorization: Bearer {{compradorToken}}
+
+
+### Verificar se foi removido
+GET {{baseUrl}}/carrinho
+Authorization: Bearer {{compradorToken}}

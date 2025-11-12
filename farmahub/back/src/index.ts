@@ -7,6 +7,7 @@ import { initializeDatabase } from "./config/database";
 import authRoutes from "./routes/auth";
 import produtoRoutes from "./routes/produtos";
 import favoritoRoutes from "./routes/favoritos";
+import carrinhoRoutes from "./routes/carrinho";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,6 +20,7 @@ app.use(passport.initialize());
 app.use("/auth", authRoutes);
 app.use("/produtos", produtoRoutes);
 app.use("/favoritos", favoritoRoutes);
+app.use("/carrinho", carrinhoRoutes)
 
 // Rota raiz
 app.get("/", (req, res) => {
