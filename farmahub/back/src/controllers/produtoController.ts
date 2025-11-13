@@ -73,7 +73,7 @@ export const pesquisarProduto = async (req: Request, res: Response) => {
 export const atualizarProduto = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const dadosValidados = produtoSchema.parse(req.body);
+        const dadosValidados = produtoUpdateSchema.parse(req.body);
         const user = req.user as User;
 
         const produtoRepository = AppDataSource.getRepository(Produto);
