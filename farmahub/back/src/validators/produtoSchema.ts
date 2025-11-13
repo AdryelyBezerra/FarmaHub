@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { Categoria } from "../entities/produto";
 
 export const produtoSchema = z.object({
     nome: z.string().min(3, "Nome de produto deve ter no mínimo 3 caracteres"),
