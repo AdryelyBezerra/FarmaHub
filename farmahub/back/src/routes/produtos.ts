@@ -38,7 +38,7 @@ router.get(
 );
 
 // Atualizar produto (apenas farmaceutico)
-router.put(
+router.patch(
     "/:id",
     passport.authenticate("jwt", { session: false }),
     verificarRole(UserRole.FARMACEUTICO),
