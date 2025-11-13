@@ -7,3 +7,5 @@ export const produtoSchema = z.object({
     preco: z.number().positive("Preço deve ser maior que zero"),
     quantidade: z.number().int().nonnegative("Quantidade não pode ser negativa"),
 });
+
+export const produtoUpdateSchema = produtoSchema.partial();
