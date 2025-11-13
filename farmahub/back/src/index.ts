@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth";
 import produtoRoutes from "./routes/produtos";
 import favoritoRoutes from "./routes/favoritos";
 import carrinhoRoutes from "./routes/carrinho";
+import pedidoRoutes from "./routes/pedidos";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,7 +21,8 @@ app.use(passport.initialize());
 app.use("/auth", authRoutes);
 app.use("/produtos", produtoRoutes);
 app.use("/favoritos", favoritoRoutes);
-app.use("/carrinho", carrinhoRoutes)
+app.use("/carrinho", carrinhoRoutes);
+app.use("/pedido", pedidoRoutes);
 
 // Rota raiz
 app.get("/", (req, res) => {

@@ -25,6 +25,6 @@ router.get(
     "/",
     passport.authenticate("jwt", { session: false }),
     listarCarrinho
-);333
+);
 
 export default router;

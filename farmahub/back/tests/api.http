@@ -4,7 +4,7 @@
 @baseUrl = http://localhost:3000
 
 @farmaceuticoToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJqb2FvQGZhcm1hLmNvbSIsInJvbGUiOiJmYXJtYWNldXRpY28iLCJpYXQiOjE3NjI5NjkxOTAsImV4cCI6MTc2MzA1NTU5MH0.b6WQviGRdkQQJB5bwGkP2oclhxe_Kq3roMJGHGk7Dao
-@compradorToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJhbmFAZ21haWwuY29tIiwicm9sZSI6ImNvbXByYWRvciIsImlhdCI6MTc2Mjk2OTIxNiwiZXhwIjoxNzYzMDU1NjE2fQ.sL0S8o-SPnvA3KPNhOE8RCH2zR0iaPW6o3RejuNouQ0
+@compradorToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJhbmFAZ21haWwuY29tIiwicm9sZSI6ImNvbXByYWRvciIsImlhdCI6MTc2MzAwNDEwMCwiZXhwIjoxNzYzMDkwNTAwfQ.KZETdzavyVgu9dANSIuI5_MPPOm8EX22pWmW4KXHpZM
 
 
 ### ==============================================
@@ -61,7 +61,7 @@ Content-Type: application/json
   "senha": "123456"
 }
 
-### 1.6 Logout (Invalida o token atual)
+### 1.6 Logout de comprador (Invalida o token atual)
 POST {{baseUrl}}/auth/logout
 Authorization: Bearer {{compradorToken}}
 
@@ -218,5 +218,48 @@ DELETE {{baseUrl}}/carrinho/2
 Authorization: Bearer {{compradorToken}}
 
 ### 4.6 Verificar Carrinho Vazio
+GET {{baseUrl}}/carrinho
+Authorization: Bearer {{compradorToken}}
+
+
+### ==============================================
+### 5. PEDIDO
+### ==============================================
+
+### 5.1 Listar itens do Carrinho que serão comprados em Pedido
+GET {{baseUrl}}/carrinho
+Authorization: Bearer {{compradorToken}}
+
+### 5.2 Criar pedido (Comprador)
+POST {{baseUrl}}/pedido
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "endereco": "Guara Rua 43, Quadra 18",
+  "metodo_pag": "cartao"
+}
+
+### 5.3 [ERRO] Criar pedido com atributo not null vazio
+POST {{baseUrl}}/pedido
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "endereco": "",
+  "metodo_pag": "cartao"
+}
+
+### 5.4 [ERRO] Criar pedido com método de pagamento inválido
+POST {{baseUrl}}/pedido
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "endereco": "Àguas Claras Quadra 17, Rua 10",
+  "metodo_pag": "boleto"
+}
+
+### 5.5 Listar itens do Carrinho depois de fazer pedido (deve estar vazio)
 GET {{baseUrl}}/carrinho
 Authorization: Bearer {{compradorToken}}
