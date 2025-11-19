@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { AppDataSource } from "../config/database";
 import { Produto } from "../entities/produto";
 import { User, UserRole } from "../entities/user";
-import { produtoSchema } from "../validators/produtoSchema";
+import { produtoSchema, produtoUpdateSchema } from "../validators/produtoSchema";
 
 export const criarProduto = async (req: Request, res: Response) => {
     try {
@@ -13,6 +13,7 @@ export const criarProduto = async (req: Request, res: Response) => {
         const novoProduto = produtoRepository.create({
             ...dadosValidados,
             user_id: user.id,
+            farmaceutico_id: user.id,
         });
 
         await produtoRepository.save(novoProduto);

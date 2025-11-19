@@ -54,4 +54,11 @@ export class Produto {
 
   @OneToMany(() => Favorito, (favorito) => favorito.produto)
   favoritos!: Favorito[];
+
+  @ManyToOne(() => User)
+  @JoinColumn({ name: "farmaceutico_id" })
+  farmaceutico!: User;
+
+  @Column()
+  farmaceutico_id!: number;
 }

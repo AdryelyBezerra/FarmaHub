@@ -3,9 +3,9 @@
 ### ==============================================
 @baseUrl = http://localhost:3000
 
-@farmaceuticoToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJqb2FvQGZhcm1hLmNvbSIsInJvbGUiOiJmYXJtYWNldXRpY28iLCJpYXQiOjE3NjI5NjkxOTAsImV4cCI6MTc2MzA1NTU5MH0.b6WQviGRdkQQJB5bwGkP2oclhxe_Kq3roMJGHGk7Dao
-@compradorToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJhbmFAZ21haWwuY29tIiwicm9sZSI6ImNvbXByYWRvciIsImlhdCI6MTc2MzAwNDEwMCwiZXhwIjoxNzYzMDkwNTAwfQ.KZETdzavyVgu9dANSIuI5_MPPOm8EX22pWmW4KXHpZM
+@farmaceuticoToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiZW1haWwiOiJqb2FvQGZhcm1hLmNvbSIsInJvbGUiOiJmYXJtYWNldXRpY28iLCJpYXQiOjE3NjM1MTk5MzksImV4cCI6MTc2MzYwNjMzOX0.gfwJzzyiq2k8cfg5ylsLD0YCG3Ai8RRmqLGRHo5Zg_4
 
+@compradorToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJiYXJiYXJhQGdtYWlsLmNvbSIsInJvbGUiOiJjb21wcmFkb3IiLCJpYXQiOjE3NjM1MjM0NDAsImV4cCI6MTc2MzYwOTg0MH0.FzG8XhNP0_BGo1XlS8jRwVdEmJPvXKxFWh2D_t77wYE
 
 ### ==============================================
 ### 1. AUTENTICAÇÃO (AUTH)
@@ -130,7 +130,7 @@ GET {{baseUrl}}/produtos/1
 Authorization: Bearer {{compradorToken}}
 
 ### 2.7 Atualizar Produto (Apenas Dono/Farmacêutico)
-PUT {{baseUrl}}/produtos/1
+PATCH {{baseUrl}}/produtos/1
 Authorization: Bearer {{farmaceuticoToken}}
 Content-Type: application/json
 
@@ -263,3 +263,140 @@ Content-Type: application/json
 ### 5.5 Listar itens do Carrinho depois de fazer pedido (deve estar vazio)
 GET {{baseUrl}}/carrinho
 Authorization: Bearer {{compradorToken}}
+
+
+### ==============================================
+### 6. FARMACÊUTICO LISTA PEDIDOS
+### ==============================================
+
+
+### 6.1 Criar Produtos para serem comprados (Farmacêutico)
+POST {{baseUrl}}/produtos
+Authorization: Bearer {{farmaceuticoToken}}
+Content-Type: application/json
+
+{
+  "nome": "Ibuprofeno 600mg",
+  "apresentacao": "Blister com 10 comprimidos",
+  "fabricante": "Generico Lab",
+  "tipo": "medicamento",
+  "preco": 15.99,
+  "quantidade": 20
+}
+
+### 6.1
+POST {{baseUrl}}/produtos
+Authorization: Bearer {{farmaceuticoToken}}
+Content-Type: application/json
+
+{
+  "nome": "Água Oxigenada",
+  "apresentacao": "Frasco 100ml",
+  "fabricante": "Generico Lab",
+  "tipo": "conveniencia",
+  "preco": 8.60,
+  "quantidade": 35
+}
+
+### 6.1
+POST {{baseUrl}}/produtos
+Authorization: Bearer {{farmaceuticoToken}}
+Content-Type: application/json
+
+{
+  "nome": "Teste COVID-19 Antígeno",
+  "apresentacao": "Caixa com 2 Kits",
+  "fabricante": "Roche Diagnostics",
+  "tipo": "medicamento",
+  "preco": 128.50,
+  "quantidade": 25
+}
+
+### 6.2 Registrar Compradores para comprar
+POST {{baseUrl}}/auth/registro
+Content-Type: application/json
+
+{
+  "nome": "Rodrigo Comprador",
+  "email": "rodrigo@gmail.com",
+  "senha": "123456",
+  "role": "comprador"
+}
+
+### 6.2
+POST {{baseUrl}}/auth/registro
+Content-Type: application/json
+
+{
+  "nome": "Bárbara Compradora",
+  "email": "barbara@gmail.com",
+  "senha": "123456",
+  "role": "comprador"
+}
+
+### 6.3 Processo de compra (Rodrigo)
+
+### Faça login como Rodrigo, insira o token gerado em compradorToken (no início do arquivo)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "rodrigo@gmail.com",
+  "senha": "123456"
+}
+
+### Autenticado como Rodrigo, adicionar ao carrinho
+POST {{baseUrl}}/carrinho
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "produto_id": 3
+}
+
+### Autenticado como Rodrigo, criar pedido
+POST {{baseUrl}}/pedido
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "endereco": "W3 Oeste, Quadra 600",
+  "metodo_pag": "pix"
+}
+
+### 6.4 Processo de compra (Bárbara)
+
+### Faça login como Bárbara, insira o token gerado em compradorToken (no início do arquivo)
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "barbara@gmail.com",
+  "senha": "123456"
+}
+
+### Autenticado como Bárbara, adicionar ao carrinho
+POST {{baseUrl}}/carrinho
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "produto_id": 4
+}
+
+### Autenticado como Bárbara, criar pedido
+POST {{baseUrl}}/pedido
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "endereco": "W3 Leste, Quadra 900",
+  "metodo_pag": "pix"
+}
+
+
+### 6.5 Autenticado como Farmacêutico, Listar Pedidos
+GET {{baseUrl}}/pedido/farmaceutico
+Authorization: Bearer {{farmaceuticoToken}}
+
+

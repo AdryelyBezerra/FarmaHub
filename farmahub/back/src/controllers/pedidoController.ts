@@ -5,6 +5,7 @@ import { PedidoItem } from "../entities/pedidoItem";
 import { Produto } from "../entities/produto";
 import { MetodoPagamento } from "../entities/pedido";
 import { Carrinho } from "../entities/carrinho";
+import { User, UserRole } from "../entities/user";
 
 export const criarPedido = async (req: Request, res: Response) => {
   try {
@@ -117,5 +118,67 @@ export const criarPedido = async (req: Request, res: Response) => {
       return res.status(error.status).json({ erro: error.message });
     }
     return res.status(500).json({ erro: "Erro ao criar pedido" });
+  }
+};
+
+
+export const listarPedidos = async (req: Request, res: Response) => {
+  try {
+    type AuthUser = {
+      id: number;
+      role: UserRole;
+    };
+
+    const user = req.user as AuthUser;
+
+    if (!user) {
+      return res.status(401).json({ erro: "Usuário não autenticado" });
+    }
+
+    if (user.role !== UserRole.FARMACEUTICO) {
+      return res.status(403).json({ erro: "Apenas farmacêuticos podem acessar este recurso." });
+    }
+
+    const pedidos = await AppDataSource.getRepository(Pedido).find({
+      relations: {
+        user: true,
+        itens: {
+          produto: true,
+        },
+      },
+    });
+
+    const pedidosFiltrados = pedidos
+      .map((pedido) => {
+        const itensDoFarma = pedido.itens.filter(
+          (i) => i.produto.farmaceutico_id === user.id
+        );
+
+        if (itensDoFarma.length === 0) return null;
+
+        return {
+          id: pedido.id,
+          data: pedido.data_pedido,
+          endereco: pedido.endereco,
+          comprador: {
+            id: pedido.user.id,
+            nome: pedido.user.nome,
+            email: pedido.user.email,
+          },
+          itens: itensDoFarma.map((item) => ({
+            produto_id: item.produto_id,
+            nome: item.produto.nome,
+            quantidade: item.quantidade,
+            preco_unit: item.preco_unit,
+            subtotal: item.preco_unit * item.quantidade,
+          })),
+        };
+      })
+      .filter(Boolean);
+
+    return res.json(pedidosFiltrados);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ erro: "Erro ao buscar pedidos." });
   }
 };
