@@ -1,45 +1,58 @@
 # 🏥 FarmaHub API
 
-> Projeto de Backend para um Marketplace de Farmácias. Desenvolvido como trabalho da disciplina de Programação Web (3º Semestre).
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Express.js](https://img.shields.io/badge/express.js-%23404d59.svg?style=for-the-badge&logo=express&logoColor=%2361DAFB)
+![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 
-A **FarmaHub API** é um sistema RESTful que gerencia o fluxo de compras entre farmacêuticos (vendedores) e clientes. O sistema controla estoques, carrinhos de compra, favoritos, pedidos e sistema de cupons de desconto.
-
----
-
-## 🚀 Tecnologias Utilizadas
-
-O projeto foi desenvolvido utilizando as seguintes tecnologias:
-
-- **Node.js** & **TypeScript**: Ambiente de execução e linguagem.
-- **Express**: Framework para gestão das rotas HTTP.
-- **TypeORM** & **SQLite**: ORM para manipulação do banco de dados.
-- **Zod**: Validação de dados de entrada (Schemas).
-- **JWT (JSON Web Token)** & **Passport**: Autenticação e segurança.
-- **Bcrypt**: Criptografia de senhas.
+> **API RESTful** para gerenciamento de Marketplace Farmacêutico, focada em controle de estoque, fluxo de vendas e segurança.
 
 ---
 
-## ⚙️ Funcionalidades
+## 💻 Sobre o Projeto
 
-### 🔐 Autenticação e Perfis
-- **Login e Registro:** Autenticação via Token JWT.
-- **Controle de Acesso (RBAC):**
-  - `Farmacêutico`: Pode criar/editar/excluir produtos e criar cupons.
-  - `Comprador`: Pode adicionar ao carrinho, favoritar e realizar compras.
+A **FarmaHub API** é o back-end robusto de um sistema de e-commerce voltado para farmácias. O projeto foi desenvolvido com foco em **Clean Code** e arquitetura escalável, gerenciando o fluxo completo entre **Farmacêuticos** (Administradores) e **Compradores**.
 
-### 💊 Gestão de Produtos
-- CRUD completo de produtos (Medicamentos, Cosméticos, etc.).
-- Controle de estoque (impede venda se estoque zerado).
-
-### 🛒 Experiência de Compra
-- **Carrinho:** Adicionar/Remover itens.
-- **Favoritos:** Lista de desejos do usuário.
-- **Cupons:** Sistema de desconto via código (validação de data e existência).
-- **Pedidos:** Finalização de compra com baixa no estoque.
+O sistema implementa regras de negócio complexas, como validação de estoques em tempo real, aplicação de cupons de desconto com verificação de validade e controle de acesso baseado em cargos (RBAC).
 
 ---
 
-## 🛠️ Como Rodar o Projeto
+## 🚀 Tecnologias e Ferramentas
+
+O projeto utiliza as principais tecnologias do mercado atual:
+
+- **Linguagem:** [TypeScript](https://www.typescriptlang.org/) (Superset JavaScript)
+- **Runtime:** [Node.js](https://nodejs.org/)
+- **Framework:** [Express](https://expressjs.com/)
+- **Database & ORM:** [SQLite](https://www.sqlite.org/) com [TypeORM](https://typeorm.io/)
+- **Validação:** [Zod](https://zod.dev/) (Schema Validation)
+- **Segurança:**
+  - [Passport-JWT](https://www.passportjs.org/) (Estratégia de Autenticação)
+  - [Bcrypt](https://www.npmjs.com/package/bcrypt) (Hashing de senhas)
+
+---
+
+## ⚙️ Funcionalidades Principais
+
+### 🔐 Segurança e Acesso (RBAC)
+- **Autenticação JWT:** Login seguro com tokens de sessão.
+- **Farmacêutico:** Permissão total para gestão de produtos e criação de campanhas (cupons).
+- **Comprador:** Acesso exclusivo às funcionalidades de compra, carrinho e favoritos.
+
+### 📦 Gestão de Estoque
+- CRUD completo de produtos.
+- **Trava de Estoque:** O sistema impede automaticamente a venda de itens sem quantidade suficiente.
+
+### 🛒 Fluxo de Venda
+- **Carrinho Inteligente:** Adição e remoção dinâmica de itens.
+- **Sistema de Cupons:** Validação de códigos promocionais, verificando existência e data de expiração.
+- **Favoritos:** Lista de desejos persistente por usuário.
+- **Pedidos:** Finalização de compra com baixa automática no banco de dados.
+
+---
+
+## 🛠️ Instalação e Execução
 
 ### Pré-requisitos
 Tenha instalado na sua máquina:
@@ -63,40 +76,38 @@ Siga os passos abaixo para rodar o servidor na sua máquina:
 
 ---
 
-## 📡 Documentação da API
+## 📡 Documentação dos Endpoints
 
-Para testar as rotas, recomenda-se usar a extensão **REST Client** do VS Code com o arquivo `tests/api.http` incluído no projeto, ou utilizar o Insomnia/Postman.
+Recomenda-se o uso do Insomnia, Postman ou a extensão REST Client (VS Code) utilizando o arquivo tests/api.http incluído no projeto.
 
-### 🟢 Rotas Públicas
+### 🟢 Autenticação (Público)
 - `POST /auth/registro` - Criar nova conta.
 - `POST /auth/login` - Entrar no sistema.
 
-### 🔒 Rotas Protegidas (Requer Bearer Token)
+#### 🔒 Produtos & Cupons (Privado)
+- `GET /produtos` - Listar catálogo *(Todos)*.
+- `POST /produtos` - Cadastrar produto *(Apenas Farmacêutico)*.
+- `PUT /produtos/:id` - Atualizar dados/preço *(Apenas Farmacêutico)*.
+- `DELETE /produtos/:id` - Remover produto *(Apenas Farmacêutico)*.
+- `POST /cupons` - Criar cupom de desconto *(Apenas Farmacêutico)*.
 
-#### 📦 Produtos
-- `GET /produtos` - Listar produtos.
-- `POST /produtos` - Criar produto *(Apenas Farmacêutico)*.
-- `PUT /produtos/:id` - Atualizar produto *(Apenas Farmacêutico)*.
-- `DELETE /produtos/:id` - Deletar produto *(Apenas Farmacêutico)*.
-
-#### 🏷️ Cupons
-- `POST /cupons` - Criar novo cupom *(Apenas Farmacêutico)*.
-- `POST /cupons/aplicar` - Validar cupom no carrinho.
-
-#### ❤️ Favoritos & 🛒 Carrinho
-- `GET /favoritos` - Ver meus favoritos.
-- `POST /favoritos` - Favoritar um produto.
-- `GET /carrinho` - Ver itens no carrinho.
-- `POST /carrinho` - Adicionar item.
-- `DELETE /carrinho/:produto_id` - Remover item.
+#### 🛒 Compras (Requer Token)
+- `POST /carrinho` - Adicionar item ao carrinho.
+- `GET /carrinho` - Visualizar itens atuais.
+- `DELETE /carrinho/:id` - Remover item do carrinho.
+- `POST /cupons/aplicar` - Validar e aplicar desconto.
+- `POST /pedido` - Finalizar compra e baixar estoque.
+- `GET /favoritos` - Listar produtos favoritos.
 
 ---
 
-## 👨‍💻 Autores
+## 👨‍💻 Autores e Colaboradores
 
-Trabalho desenvolvido por:
+Este projeto foi desenvolvido originalmente como parte da disciplina de Programação Web.
 
 - **Luiz Henrique**
 - **Tatiane da Silva**
 - **Maria Adryely**
 - **Gabriela Marques**
+
+<p align="center"> Desenvolvido com 💙 por Luiz Henrique </p>
