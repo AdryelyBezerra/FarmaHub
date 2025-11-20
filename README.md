@@ -63,39 +63,40 @@ Siga os passos abaixo para rodar o servidor na sua máquina:
 
 ---
 
-endpoints 📡 Documentação da API
+## 📡 Documentação da API
 
-Para testar as rotas, recomenda-se usar a extensão REST Client do VS Code com o arquivo tests/api.http incluído no projeto, ou utilizar o Insomnia/Postman.
+Para testar as rotas, recomenda-se usar a extensão **REST Client** do VS Code com o arquivo `tests/api.http` incluído no projeto, ou utilizar o Insomnia/Postman.
 
-🟢 Rotas Públicas
-   POST /auth/registro - Criar nova conta.
-   POST /auth/login - Entrar no sistema.
+### 🟢 Rotas Públicas
+- `POST /auth/registro` - Criar nova conta.
+- `POST /auth/login` - Entrar no sistema.
 
-🔒 Rotas Protegidas (Requer Bearer Token)
+### 🔒 Rotas Protegidas (Requer Bearer Token)
 
-📦 Produtos
-   GET /produtos - Listar produtos.
-   POST /produtos - Criar produto (Apenas Farmacêutico).
-   PUT /produtos/:id - Atualizar produto (Apenas Farmacêutico).
-   DELETE /produtos/:id - Deletar produto (Apenas Farmacêutico).
+#### 📦 Produtos
+- `GET /produtos` - Listar produtos.
+- `POST /produtos` - Criar produto *(Apenas Farmacêutico)*.
+- `PUT /produtos/:id` - Atualizar produto *(Apenas Farmacêutico)*.
+- `DELETE /produtos/:id` - Deletar produto *(Apenas Farmacêutico)*.
 
-🏷️ Cupons
-   POST /cupons - Criar novo cupom (Apenas Farmacêutico).
-   POST /cupons/aplicar - Validar cupom no carrinho.
+#### 🏷️ Cupons
+- `POST /cupons` - Criar novo cupom *(Apenas Farmacêutico)*.
+- `POST /cupons/aplicar` - Validar cupom no carrinho.
 
-❤️ Favoritos & 🛒 Carrinho
-   GET /favoritos - Ver meus favoritos.
-   POST /favoritos - Favoritar um produto.
-   GET /carrinho - Ver itens no carrinho.
-   POST /carrinho - Adicionar item.
-   DELETE /carrinho/:produto_id - Remover item.
+#### ❤️ Favoritos & 🛒 Carrinho
+- `GET /favoritos` - Ver meus favoritos.
+- `POST /favoritos` - Favoritar um produto.
+- `GET /carrinho` - Ver itens no carrinho.
+- `POST /carrinho` - Adicionar item.
+- `DELETE /carrinho/:produto_id` - Remover item.
 
 ---
 
-👨‍💻 Autores
+## 👨‍💻 Autores
 
 Trabalho desenvolvido por:
-   Luiz Henrique
-   Tatiane da Silva
-   Maria Adryely
-   Gabriela Marques
+
+- **Luiz Henrique**
+- **Tatiane da Silva**
+- **Maria Adryely**
+- **Gabriela Marques**
