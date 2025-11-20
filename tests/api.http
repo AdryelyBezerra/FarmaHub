@@ -1,0 +1,199 @@
+### ==============================================
+### CONFIGURAÇÕES GERAIS
+### ==============================================
+@baseUrl = http://localhost:3000
+
+# ATENÇÃO: Atualize estes tokens após fazer o login (1.4 e 1.5)
+@farmaceuticoToken = SEU_TOKEN_AQUI
+@compradorToken = SEU_TOKEN_AQUI
+
+### ==============================================
+### 1. AUTENTICAÇÃO (AUTH)
+### ==============================================
+
+### 1.1 Registrar Farmacêutico
+POST {{baseUrl}}/auth/registro
+Content-Type: application/json
+
+{
+  "nome": "João Farmacêutico",
+  "email": "joao@farma.com",
+  "senha": "123456",
+  "role": "farmaceutico"
+}
+
+### 1.2 Registrar Comprador
+POST {{baseUrl}}/auth/registro
+Content-Type: application/json
+
+{
+  "nome": "Ana Compradora",
+  "email": "ana@gmail.com",
+  "senha": "123456",
+  "role": "comprador"
+}
+
+### 1.3 [ERRO] Registrar com email inválido
+POST {{baseUrl}}/auth/registro
+Content-Type: application/json
+
+{
+  "nome": "Teste",
+  "email": "emailerrado",
+  "senha": "123456"
+}
+
+### 1.4 Login Farmacêutico
+# Copie o token da resposta para @farmaceuticoToken
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "joao@farma.com",
+  "senha": "123456"
+}
+
+### 1.5 Login Comprador
+# Copie o token da resposta para @compradorToken
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "ana@gmail.com",
+  "senha": "123456"
+}
+
+### 1.6 Logout
+POST {{baseUrl}}/auth/logout
+Authorization: Bearer {{compradorToken}}
+
+
+### ==============================================
+### 2. PRODUTOS
+### ==============================================
+
+### 2.1 Criar Produto (Farmacêutico)
+POST {{baseUrl}}/produtos
+Authorization: Bearer {{farmaceuticoToken}}
+Content-Type: application/json
+
+{
+  "nome": "Paracetamol 750mg",
+  "apresentacao": "Caixa com 20 comprimidos",
+  "fabricante": "Medley",
+  "tipo": "medicamento",
+  "preco": 12.50,
+  "quantidade": 100
+}
+
+### 2.2 Criar Produto 2 (Farmacêutico)
+POST {{baseUrl}}/produtos
+Authorization: Bearer {{farmaceuticoToken}}
+Content-Type: application/json
+
+{
+  "nome": "Protetor Solar FPS 50",
+  "apresentacao": "200ml",
+  "fabricante": "Nivea",
+  "tipo": "cosmetico",
+  "preco": 45.90,
+  "quantidade": 50
+}
+
+### 2.3 Listar Produtos
+GET {{baseUrl}}/produtos
+Authorization: Bearer {{farmaceuticoToken}}
+
+
+### ==============================================
+### 3. CUPONS (NOVO!)
+### ==============================================
+
+### 3.1 Criar Cupom Válido (Farmacêutico)
+POST {{baseUrl}}/cupons
+Authorization: Bearer {{farmaceuticoToken}}
+Content-Type: application/json
+
+{
+  "codigo": "DESCONTO10",
+  "desconto": 10,
+  "validade": "2025-12-31"
+}
+
+### 3.2 Criar Cupom Vencido (Para teste de erro)
+POST {{baseUrl}}/cupons
+Authorization: Bearer {{farmaceuticoToken}}
+Content-Type: application/json
+
+{
+  "codigo": "VENCIDO2020",
+  "desconto": 50,
+  "validade": "2020-01-01"
+}
+
+### 3.3 [ERRO] Comprador tentando criar cupom
+POST {{baseUrl}}/cupons
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "codigo": "HACKER100",
+  "desconto": 100,
+  "validade": "2030-01-01"
+}
+
+### 3.4 Aplicar Cupom Válido (Comprador)
+# Esperado: Retornar o valor do desconto
+POST {{baseUrl}}/cupons/aplicar
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "codigo": "DESCONTO10"
+}
+
+### 3.5 [ERRO] Aplicar Cupom Inexistente
+POST {{baseUrl}}/cupons/aplicar
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "codigo": "NAOEXISTE"
+}
+
+### 3.6 [ERRO] Aplicar Cupom Vencido
+POST {{baseUrl}}/cupons/aplicar
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "codigo": "VENCIDO2020"
+}
+
+
+### ==============================================
+### 4. CARRINHO & PEDIDOS
+### ==============================================
+
+### 4.1 Adicionar ao Carrinho (Comprador)
+POST {{baseUrl}}/carrinho
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "produto_id": 1
+}
+
+### 4.2 Criar Pedido (Comprador)
+POST {{baseUrl}}/pedido
+Authorization: Bearer {{compradorToken}}
+Content-Type: application/json
+
+{
+  "endereco": "Rua das Farmácias, 100",
+  "metodo_pag": "pix"
+}
+
+### 4.3 Listar Pedidos (Farmacêutico)
+GET {{baseUrl}}/pedido/farmaceutico
+Authorization: Bearer {{farmaceuticoToken}}
